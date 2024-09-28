@@ -1,28 +1,26 @@
 package com.dwes.MiSegundoProyecto.clases;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.Objects;
+import java.util.Set;
 
-public final class Producto {
+public final class Pedido {
     private static int ids = 0;
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private final int id;
-    private final String nombre;
+    private final Set<Producto> productos;
     private final double precio;
 
-    public Producto(String nombre, double precio) {
+    public Pedido(Set<Producto> productos) {
         this.id = ids++;
-        this.nombre = nombre;
-        this.precio = precio;
+        this.productos = productos;
+        this.precio = productos.stream().mapToDouble(Producto::getPrecio).sum();
     }
 
     public int getId() {
         return id;
     }
 
-    public String getNombre() {
-        return nombre;
+    public Set<Producto> getProductos() {
+        return productos;
     }
 
     public double getPrecio() {
@@ -31,9 +29,9 @@ public final class Producto {
 
     @Override
     public String toString() {
-        return "Producto{" +
+        return "Pedido{" +
                 "id=" + id +
-                ", nombre='" + nombre + '\'' +
+                ", productos=" + productos +
                 ", precio=" + precio +
                 '}';
     }
@@ -41,8 +39,8 @@ public final class Producto {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Producto producto)) return false;
-        return id == producto.id;
+        if (!(o instanceof Pedido pedido)) return false;
+        return id == pedido.id;
     }
 
     @Override
